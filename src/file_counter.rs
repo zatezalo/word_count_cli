@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
+use regex::Regex;
 
 use crate::utils::Config;
 
@@ -32,6 +33,7 @@ struct FileCouner {
 
 impl FileCouner {
     fn new(keywords: Vec<String>, path: &String) -> FileCouner {
+        let re = Regex::new(r"\w+").unwrap();
         let file_lines: Vec<String> =
             fs::read_to_string(path)
             .expect("unable to read file")
@@ -40,7 +42,10 @@ impl FileCouner {
             .collect();
 
         let file_words: Vec<String> = file_lines.iter()
-            .flat_map(|line| line.split_whitespace().map(|word| word.to_string()))
+            .flat_map(|line| {
+                re.find_iter(line)
+                    .map(|word| word.as_str().to_string())
+            })
             .collect();
         
         let mut word_count: HashMap<String, u32> = HashMap::new();
