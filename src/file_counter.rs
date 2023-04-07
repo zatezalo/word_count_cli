@@ -7,7 +7,7 @@ use crate::utils::Config;
 
 const PATH_TO_EXAMPLES: &str = "example";
 
-pub fn count(config: Config) {
+pub fn count(config: &Config) {
     go_threw_dirs(PathBuf::from(PATH_TO_EXAMPLES), &config, 0);
 }
 

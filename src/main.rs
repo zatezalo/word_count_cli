@@ -1,13 +1,18 @@
 mod web_counter;
 mod file_counter;
 mod utils;
-use file_counter::count;
+use reqwest::Error;
 use utils::*;
+use web_counter::web_count;
+use file_counter::count;
 
-fn main() {
+#[tokio::main]
+async fn  main() -> Result<(), Error>  {
     let config = Config::new();
-    println!("{}  {:?}", config.hop_count, config.keywords);
-    count(config);
+    count(&config);
+    println!("###############################");
+    web_count(&config).await;
+    Ok(())
 }
 
 
